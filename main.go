@@ -4,21 +4,22 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"runtime"
 
-	"github.com/haccer/subjack/subjack"
+	"github.com/miknonny/subjack/subjack"
 )
 
 func main() {
-	GOPATH := os.Getenv("GOPATH")
-	Project := "/src/github.com/haccer/subjack/"
+
+	// Project := "subjack/"
 	configFile := "fingerprints.json"
-	defaultConfig := GOPATH + Project + configFile
+	defaultConfig := configFile
 
 	o := subjack.Options{}
 
 	flag.StringVar(&o.Domain, "d", "", "Domain.")
 	flag.StringVar(&o.Wordlist, "w", "", "Path to wordlist.")
-	flag.IntVar(&o.Threads, "t", 10, "Number of concurrent threads (Default: 10).")
+	flag.IntVar(&o.Threads, "t", runtime.NumCPU(), "Number of concurrent threads (Default: number of CPU cores).")
 	flag.IntVar(&o.Timeout, "timeout", 10, "Seconds to wait before connection timeout (Default: 10).")
 	flag.BoolVar(&o.Ssl, "ssl", false, "Force HTTPS connections (May increase accuracy (Default: http://).")
 	flag.BoolVar(&o.All, "a", false, "Find those hidden gems by sending requests to every URL. (Default: Requests are only sent to URLs with identified CNAMEs).")
@@ -39,5 +40,6 @@ func main() {
 		os.Exit(1)
 	}
 
+	fmt.Println(&o)
 	subjack.Process(&o)
 }

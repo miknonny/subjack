@@ -3,7 +3,7 @@ package subjack
 import (
 	"bufio"
 	"encoding/json"
-	"io/ioutil"
+	"io"
 	"log"
 	"os"
 	"strings"
@@ -90,7 +90,7 @@ func writeJSON(service, url, output string) {
 
 	defer f.Close()
 
-	file, err := ioutil.ReadAll(f)
+	file, err := io.ReadAll(f)
 	if err != nil {
 		log.Fatalln(err)
 	}
@@ -112,7 +112,7 @@ func writeJSON(service, url, output string) {
 }
 
 func fingerprints(file string) (data []Fingerprints) {
-	config, err := ioutil.ReadFile(file)
+	config, err := os.ReadFile(file)
 	if err != nil {
 		log.Fatalln(err)
 	}
